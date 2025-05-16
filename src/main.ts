@@ -75,12 +75,12 @@ async function handleLogs(args: any, workflowHandler: WorkflowHandler) {
 async function run(): Promise<void> {
   try {
     const args = getArgs()
-    core.info('Args: ' + JSON.stringify(args, null, 2))
+    core.info('Args: ' + args)
     const workflowHandler = new WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName, args.displayTitle)
 
     // Trigger workflow run
     await workflowHandler.triggerWorkflow(args.inputs)
-    core.info('Workflow triggered 🚀')
+    core.info('Workflow triggered 🚀 ...')
 
     if (args.displayWorkflowUrl) {
       const url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)
