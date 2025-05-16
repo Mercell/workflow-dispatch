@@ -151,7 +151,7 @@ export class WorkflowHandler {
     }
     try {
       let runs = await this.findAllWorkflowRuns()
-      core.info(runs)
+      core.info('runs: ' + JSON.stringify(runs, null, 2))
       if (this.runName) {
         runs = runs.filter((r: any) => r.name == this.runName)
       }

@@ -29355,7 +29355,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const args = (0, utils_1.getArgs)();
-            core.info('Args: ' + args);
+            core.info('Args: ' + JSON.stringify(args, null, 2));
             const workflowHandler = new workflow_handler_1.WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName, args.displayTitle);
             // Trigger workflow run
             yield workflowHandler.triggerWorkflow(args.inputs);
@@ -29696,7 +29696,7 @@ class WorkflowHandler {
             }
             try {
                 let runs = yield this.findAllWorkflowRuns();
-                core.info(runs);
+                core.info('runs: ' + JSON.stringify(runs, null, 2));
                 if (this.runName) {
                     runs = runs.filter((r) => r.name == this.runName);
                 }
