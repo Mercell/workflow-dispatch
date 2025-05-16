@@ -75,7 +75,7 @@ async function handleLogs(args: any, workflowHandler: WorkflowHandler) {
 async function run(): Promise<void> {
   try {
     const args = getArgs()
-    const workflowHandler = new WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName)
+    const workflowHandler = new WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName, args.displayTitle)
 
     // Trigger workflow run
     await workflowHandler.triggerWorkflow(args.inputs)
