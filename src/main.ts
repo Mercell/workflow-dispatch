@@ -80,7 +80,7 @@ async function run(): Promise<void> {
 
     // Trigger workflow run
     await workflowHandler.triggerWorkflow(args.inputs)
-    core.info('Workflow triggered 🚀 ...')
+    core.info('Workflow triggered 🚀')
 
     if (args.displayWorkflowUrl) {
       const url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)

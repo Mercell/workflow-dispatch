@@ -29355,7 +29355,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const args = (0, utils_1.getArgs)();
-            const workflowHandler = new workflow_handler_1.WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName);
+            core.info('Args: ' + args);
+            const workflowHandler = new workflow_handler_1.WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName, args.displayTitle);
             // Trigger workflow run
             yield workflowHandler.triggerWorkflow(args.inputs);
             core.info('Workflow triggered 🚀');
@@ -29466,6 +29467,7 @@ function getArgs() {
     const checkStatusInterval = toMilliseconds(core.getInput('wait-for-completion-interval'));
     const runName = core.getInput('run-name');
     const workflowLogMode = core.getInput('workflow-logs');
+    const displayTitle = core.getInput('display-title');
     return {
         token,
         workflowRef,
@@ -29480,7 +29482,8 @@ function getArgs() {
         waitForCompletion,
         waitForCompletionTimeout,
         runName,
-        workflowLogMode
+        workflowLogMode,
+        displayTitle
     };
 }
 exports.getArgs = getArgs;
@@ -29589,12 +29592,13 @@ const ofConclusion = (conclusion) => {
     return WorkflowRunConclusion[key];
 };
 class WorkflowHandler {
-    constructor(token, workflowRef, owner, repo, ref, runName) {
+    constructor(token, workflowRef, owner, repo, ref, runName, displayTitle) {
         this.workflowRef = workflowRef;
         this.owner = owner;
         this.repo = repo;
         this.ref = ref;
         this.runName = runName;
+        this.displayTitle = displayTitle;
         this.triggerDate = 0;
         // Get octokit client for making API calls
         this.octokit = github.getOctokit(token);
@@ -29692,8 +29696,13 @@ class WorkflowHandler {
             }
             try {
                 let runs = yield this.findAllWorkflowRuns();
+                core.info(runs);
                 if (this.runName) {
                     runs = runs.filter((r) => r.name == this.runName);
+                }
+                if (this.displayTitle) {
+                    core.info('Filtering by display title: ' + this.displayTitle);
+                    runs = runs.filter((r) => r.display_title === this.displayTitle);
                 }
                 if (runs.length == 0) {
                     throw new Error('Run not found');

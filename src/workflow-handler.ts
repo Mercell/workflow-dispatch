@@ -146,18 +146,18 @@ export class WorkflowHandler {
   }
 
   async getWorkflowRunId(): Promise<number> {
-    // if (this.workflowRunId) {
-    //   return this.workflowRunId
-    // }
+    if (this.workflowRunId) {
+      return this.workflowRunId
+    }
     try {
       let runs = await this.findAllWorkflowRuns()
-      core.warning(runs)
+      core.info(runs)
       if (this.runName) {
         runs = runs.filter((r: any) => r.name == this.runName)
       }
 
       if (this.displayTitle) {
-        core.warning('Filtering by display title', this.displayTitle)
+        core.info('Filtering by display title: ' + this.displayTitle)
         runs = runs.filter((r: any) => r.display_title === this.displayTitle)
       }
 
