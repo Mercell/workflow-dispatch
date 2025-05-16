@@ -81,9 +81,8 @@ async function run(): Promise<void> {
     await workflowHandler.triggerWorkflow(args.inputs)
     core.info('Workflow triggered 🚀')
 
-    let url
     if (args.displayWorkflowUrl) {
-      url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)
+      const url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)
       core.info(`You can follow the running workflow here: ${url}`)
       core.setOutput('workflow-url', url)
     }
@@ -94,21 +93,6 @@ async function run(): Promise<void> {
 
     core.info('Waiting for workflow completion')
     const { result, start } = await waitForCompletionOrTimeout(workflowHandler, args.checkStatusInterval, args.waitForCompletionTimeout)
-
-    if (url) {
-      await core.summary
-        .addHeading('🧪 Dev Deployment Workflow')
-        .addLink('You can watch the workflow here', `${url}`)
-        .addRaw(`Workflow run status: ${result?.status}`)
-        .write()
-        .catch(e => core.error(`Failed to write summary: ${e}`))
-    } else {
-      await core.summary
-        .addHeading('🧪 Dev Deployment Workflow')
-        .addRaw(`Workflow run status: ${result?.status}`)
-        .write()
-        .catch(e => core.error(`Failed to write summary: ${e}`))
-    }
 
     await handleLogs(args, workflowHandler)
 
