@@ -150,6 +150,7 @@ export class WorkflowHandler {
     }
     try {
       let runs = await this.findAllWorkflowRuns()
+      console.log(runs[0])
       if (this.runName) {
         runs = runs.filter((r: any) => r.name == this.runName)
       }
