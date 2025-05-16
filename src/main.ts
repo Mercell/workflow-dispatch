@@ -75,15 +75,15 @@ async function handleLogs(args: any, workflowHandler: WorkflowHandler) {
 async function run(): Promise<void> {
   try {
     const args = getArgs()
-    core.info('Args: ' + JSON.stringify(args, null, 2))
     const workflowHandler = new WorkflowHandler(args.token, args.workflowRef, args.owner, args.repo, args.ref, args.runName, args.displayTitle)
 
     // Trigger workflow run
     await workflowHandler.triggerWorkflow(args.inputs)
     core.info('Workflow triggered 🚀')
 
+    let url
     if (args.displayWorkflowUrl) {
-      const url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)
+      url = await getFollowUrl(workflowHandler, args.displayWorkflowUrlInterval, args.displayWorkflowUrlTimeout)
       core.info(`You can follow the running workflow here: ${url}`)
       core.setOutput('workflow-url', url)
     }
@@ -94,6 +94,21 @@ async function run(): Promise<void> {
 
     core.info('Waiting for workflow completion')
     const { result, start } = await waitForCompletionOrTimeout(workflowHandler, args.checkStatusInterval, args.waitForCompletionTimeout)
+
+    if (url) {
+      await core.summary
+        .addHeading('🧪 Dev Deployment Workflow')
+        .addLink('You can watch the workflow here', `${url}`)
+        .addRaw(`Workflow run status: ${result?.status}`)
+        .write()
+        .catch(e => core.error(`Failed to write summary: ${e}`))
+    } else {
+      await core.summary
+        .addHeading('🧪 Dev Deployment Workflow')
+        .addRaw(`Workflow run status: ${result?.status}`)
+        .write()
+        .catch(e => core.error(`Failed to write summary: ${e}`))
+    }
 
     await handleLogs(args, workflowHandler)
 
