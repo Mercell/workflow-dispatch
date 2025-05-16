@@ -146,9 +146,9 @@ export class WorkflowHandler {
   }
 
   async getWorkflowRunId(): Promise<number> {
-    if (this.workflowRunId) {
-      return this.workflowRunId
-    }
+    // if (this.workflowRunId) {
+    //   return this.workflowRunId
+    // }
     try {
       let runs = await this.findAllWorkflowRuns()
       core.warning(runs)
