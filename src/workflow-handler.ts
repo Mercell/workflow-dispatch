@@ -170,6 +170,7 @@ export class WorkflowHandler {
         await this.debugFoundWorkflowRuns(runs)
       }
 
+      core.setOutput('workflow-runs-found', runs.length)
       this.workflowRunId = runs[0].id as number
 
       return this.workflowRunId

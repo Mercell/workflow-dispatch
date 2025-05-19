@@ -29709,6 +29709,7 @@ class WorkflowHandler {
                     core.warning(`Found ${runs.length} runs. Using the last one.`);
                     yield this.debugFoundWorkflowRuns(runs);
                 }
+                core.setOutput('workflow-runs-found', runs.length);
                 this.workflowRunId = runs[0].id;
                 return this.workflowRunId;
             }

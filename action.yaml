@@ -64,6 +64,8 @@ outputs:
     description: 'ID of the triggered workflow'
   workflow-url:
     description: 'URL of the triggered workflow'
+  workflow-runs-found:
+    description: 'Number of workflow runs found (while searching for the triggered workflow run)'
   workflow-logs:
     description: |
       Logs of the triggered workflow. Based on `inputs.workflow-logs`, format is set to:
