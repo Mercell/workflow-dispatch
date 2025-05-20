@@ -54,7 +54,8 @@ export class WorkflowHandler {
     private owner: string,
     private repo: string,
     private ref: string,
-    private runName: string) {
+    private runName: string,
+    private displayTitle?: string) {
     // Get octokit client for making API calls
     this.octokit = github.getOctokit(token)
   }
@@ -150,8 +151,14 @@ export class WorkflowHandler {
     }
     try {
       let runs = await this.findAllWorkflowRuns()
+
       if (this.runName) {
         runs = runs.filter((r: any) => r.name == this.runName)
+      }
+
+      if (this.displayTitle) {
+        core.info('Filtering by display title: ' + this.displayTitle)
+        runs = runs.filter((r: any) => r.display_title === this.displayTitle)
       }
 
       if (runs.length == 0) {
@@ -163,6 +170,7 @@ export class WorkflowHandler {
         await this.debugFoundWorkflowRuns(runs)
       }
 
+      core.setOutput('workflow-runs-found', runs.length)
       this.workflowRunId = runs[0].id as number
 
       return this.workflowRunId

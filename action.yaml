@@ -5,6 +5,9 @@ inputs:
   workflow:
     description: 'Name or ID of workflow to run'
     required: true
+  display-title:
+    description: 'Display title to filter the target workflow run'
+    required: false
   token:
     description: 'GitHub token with repo write access, can NOT use secrets.GITHUB_TOKEN, see readme'
     required: true
@@ -61,6 +64,8 @@ outputs:
     description: 'ID of the triggered workflow'
   workflow-url:
     description: 'URL of the triggered workflow'
+  workflow-runs-found:
+    description: 'Number of workflow runs found (while searching for the triggered workflow run)'
   workflow-logs:
     description: |
       Logs of the triggered workflow. Based on `inputs.workflow-logs`, format is set to:
